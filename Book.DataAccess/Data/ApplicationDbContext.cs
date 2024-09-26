@@ -1,7 +1,7 @@
 ﻿using BookMVCWebsite.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookMVCWebsite.Data;
+namespace BookMVCWebsite.DataAccess.Data;
 
 public class ApplicationDbContext : DbContext
 {
