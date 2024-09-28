@@ -15,6 +15,7 @@ public class Repository<T> : IRepository<T> where T : class
         this.dbSet = _db.Set<T>();
         // _db.Categories == dbSet
     }
+
     public void Add(T entity)
     {
         dbSet.Add(entity);
