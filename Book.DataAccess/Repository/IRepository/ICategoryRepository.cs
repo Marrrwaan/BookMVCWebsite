@@ -1,4 +1,4 @@
-﻿using BookMVCWebsite.Models;
+﻿using Book.Models;
 
 namespace Book.DataAccess.Repository.IRepository;
 

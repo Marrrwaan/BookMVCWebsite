@@ -1,4 +1,4 @@
-﻿namespace Book.Utility;
+﻿namespace BookMVCWebsite.Utility;
 
 public static class SD
 {
