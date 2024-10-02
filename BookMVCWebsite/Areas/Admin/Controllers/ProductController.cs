@@ -1,6 +1,7 @@
 ﻿using Book.DataAccess.Repository.IRepository;
 using Book.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookMVCWebsite.Areas.Admin.Controllers;
 
@@ -15,11 +16,18 @@ public class ProductController : Controller
     }
     public IActionResult Index()
     {
-        List<Product> categories = _uniteOfWork.Product.GetAll().ToList();
-        return View(categories);
+        List<Product> productList = _uniteOfWork.Product.GetAll().ToList();
+        return View(productList);
     }
     public IActionResult Create()
     {
+        IEnumerable<SelectListItem> CategoryList = _uniteOfWork.Category.GetAll().Select(c => new SelectListItem
+        {
+            Text = c.Name,
+            Value = c.Id.ToString()
+        });
+        ViewBag.CategoryList = CategoryList;
+
         return View();
     }
 
