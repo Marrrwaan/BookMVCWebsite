@@ -2,8 +2,9 @@
 using BookMVCWebsite.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookMVCWebsite.Controllers;
+namespace BookMVCWebsite.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class CategoryController : Controller
 {
     private readonly IUnitOfWork _uniteOfWork;
