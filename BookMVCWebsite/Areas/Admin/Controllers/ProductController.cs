@@ -20,7 +20,7 @@ public class ProductController : Controller
         List<Product> productList = _uniteOfWork.Product.GetAll().ToList();
         return View(productList);
     }
-    public IActionResult Create()
+    public IActionResult Upsert(int? id) //update + insert
     {
         ProductVM productVM = new()
         {
@@ -31,12 +31,21 @@ public class ProductController : Controller
             }),
             Product = new Product()
         };
-
-        return View(productVM);
+        if (id == null || id == 0)
+        {
+            // create
+            return View(productVM);
+        }
+        else
+        {
+         //update
+            productVM.Product = _uniteOfWork.Product.Get(p => p.Id == id);
+            return View(productVM);
+        }
     }
 
     [HttpPost]
-    public IActionResult Create(ProductVM productVM)
+    public IActionResult Upsert(ProductVM productVM, IFormFile? file)
     {
         if (ModelState.IsValid)
         {
@@ -54,29 +63,6 @@ public class ProductController : Controller
             });
             return View(productVM);
         }
-    }
-    public IActionResult Edit(int? id)
-    {
-        if (id == null || id == 0) { return NotFound(); }
-
-        Product? productFromDb = _uniteOfWork.Product.Get(c => c.Id == id);
-
-        if (productFromDb == null) { return NotFound(); }
-
-        return View(productFromDb);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(Product obj)
-    {
-        if (ModelState.IsValid)
-        {
-            _uniteOfWork.Product.Update(obj);
-            _uniteOfWork.Save();
-            TempData["success"] = "Product updated successfully";
-            return RedirectToAction("Index");
-        }
-        return View();
     }
 
     public IActionResult Delete(int? id)
