@@ -1,5 +1,6 @@
 ﻿using Book.DataAccess.Repository.IRepository;
 using Book.Models;
+using Book.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -21,27 +22,38 @@ public class ProductController : Controller
     }
     public IActionResult Create()
     {
-        IEnumerable<SelectListItem> CategoryList = _uniteOfWork.Category.GetAll().Select(c => new SelectListItem
+        ProductVM productVM = new()
         {
-            Text = c.Name,
-            Value = c.Id.ToString()
-        });
-        ViewBag.CategoryList = CategoryList;
+            CategoryList = _uniteOfWork.Category.GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            }),
+            Product = new Product()
+        };
 
-        return View();
+        return View(productVM);
     }
 
     [HttpPost]
-    public IActionResult Create(Product obj)
+    public IActionResult Create(ProductVM productVM)
     {
         if (ModelState.IsValid)
         {
-            _uniteOfWork.Product.Add(obj);
+            _uniteOfWork.Product.Add(productVM.Product);
             _uniteOfWork.Save();
             TempData["success"] = "Product created successfully";
             return RedirectToAction("Index");
         }
-        return View();
+        else
+        {
+            productVM.CategoryList = _uniteOfWork.Category.GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            });
+            return View(productVM);
+        }
     }
     public IActionResult Edit(int? id)
     {
